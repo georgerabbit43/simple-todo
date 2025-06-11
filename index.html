@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Todo List App</title>
+  <style>
+    body { font-family: Arial, sans-serif; max-width: 400px; margin: 40px auto; }
+    h1 { text-align: center; }
+    #todo-input { width: 70%; padding: 8px; }
+    #add-btn { padding: 8px 12px; }
+    ul { list-style: none; padding: 0; }
+    li { display: flex; align-items: center; margin: 8px 0; }
+    li.completed span { text-decoration: line-through; color: #888; }
+    .todo-text { flex: 1; margin-left: 8px; }
+  </style>
+</head>
+<body>
+  <h1>Todo List</h1>
+  <div>
+    <input id="todo-input" type="text" placeholder="Add a new todo..." />
+    <button id="add-btn">Add</button>
+  </div>
+  <ul id="todo-list"></ul>
+  <script>
+    const todos = [];
+
+    function renderTodos() {
+      const list = document.getElementById('todo-list');
+      list.innerHTML = '';
+      todos.forEach((todo, index) => {
+        const li = document.createElement('li');
+        li.className = todo.completed ? 'completed' : '';
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = todo.completed;
+        checkbox.addEventListener('change', () => toggleTodo(index));
+        const span = document.createElement('span');
+        span.className = 'todo-text';
+        span.textContent = todo.text;
+        li.appendChild(checkbox);
+        li.appendChild(span);
+        list.appendChild(li);
+      });
+    }
+
+    function addTodo() {
+      const input = document.getElementById('todo-input');
+      const text = input.value.trim();
+      if (text) {
+        todos.push({ text, completed: false });
+        input.value = '';
+        renderTodos();
+      }
+    }
+
+    function toggleTodo(index) {
+      todos[index].completed = !todos[index].completed;
+      renderTodos();
+    }
+
+    document.getElementById('add-btn').addEventListener('click', addTodo);
+    document.getElementById('todo-input').addEventListener('keydown', function(e) {
+      if (e.key === 'Enter') addTodo();
+    });
+
+    // Initial render
+    renderTodos();
+  </script>
+</body>
+</html>
